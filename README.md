@@ -1,1 +1,1 @@
-# DQN-on-Open-AI-Gym
+Deep Q Learning Implementation on some environments in the OpenAI Gym. 
