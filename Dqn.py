@@ -8,10 +8,12 @@ from keras.optimizers import Adam
 
 
 class Learner:
-    def __init__(self, state_space_size, action_space_size):
+    def __init__(self, state_space_size, action_space_size, first_hidden_layer_size, second_hidden_layer_size):
         self.state_size = state_space_size
         self.action_size = action_space_size
         self.learning_rate = 0.001
+        self.firstHidden = first_hidden_layer_size
+        self.secondHidden = second_hidden_layer_size
         self.regressor = self._build_model()
         self.exploration = 1.
         self.exploration_decay = 0.99
@@ -22,15 +24,18 @@ class Learner:
 
     def _build_model(self):
         regressor = Sequential()
-        regressor.add(Dense(output_dim=20, input_dim=self.state_size, activation='relu'))
-        regressor.add(Dense(output_dim=20, activation='relu'))
+        regressor.add(Dense(output_dim=self.firstHidden, input_dim=self.state_size, activation='relu'))
+        regressor.add(Dense(output_dim=self.secondHidden, activation='relu'))
         regressor.add(Dense(output_dim=self.action_size, activation='linear'))
         regressor.compile(optimizer=Adam(lr=self.learning_rate), loss='mse')
         return regressor
 
     def act(self, state):
         if np.random.rand() <= self.exploration:
-            action = np.random.choice(range(self.action_size))
+            # Mountain - Car
+            action = np.random.choice([0, 2])
+            # Cartpole
+            # action = np.random.choice(range(self.action_size))
         else:
             action = np.argmax(self.regressor.predict(state), axis=1)[0]
         return action
