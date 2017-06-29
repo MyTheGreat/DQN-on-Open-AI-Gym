@@ -32,10 +32,9 @@ class Learner:
 
     def act(self, state):
         if np.random.rand() <= self.exploration:
-            # Mountain - Car
-            action = np.random.choice([0, 2])
-            # Cartpole
-            # action = np.random.choice(range(self.action_size))
+            # Better option for Mountain - Car
+            # action = np.random.choice([0, 2])
+            action = np.random.choice(range(self.action_size))
         else:
             action = np.argmax(self.regressor.predict(state), axis=1)[0]
         return action
